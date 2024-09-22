@@ -29,6 +29,24 @@ def apply_transform(
 
     ### FILL: Apply Composition Transform
     # Note: for scale and rotation, implement them around the center of the image （围绕图像中心进行放缩和旋转）
+    center = (transformed_image.shape[1] // 2, transformed_image.shape[0] // 2)
+    # 1. Scale
+    M_scale = to_3x3(cv2.getRotationMatrix2D(center, 0, scale))
+    # 2. Rotation
+    M_rot = to_3x3(cv2.getRotationMatrix2D(center, rotation, 1))
+    # 3. Translation
+    M_trans = to_3x3(np.array([[1, 0, translation_x], [0, 1, translation_y]]))
+
+    M = M_trans @ M_rot @ M_scale
+    transformed_image = cv2.warpPerspective(
+        transformed_image,
+        M,
+        (transformed_image.shape[1], transformed_image.shape[0]),
+    ) + np.array((255, 255, 255), dtype=np.uint8).reshape(1, 1, 3)
+
+    # 4.Filp
+    if flip_horizontal:
+        transformed_image = cv2.flip(transformed_image, 1)
 
     return transformed_image
 
