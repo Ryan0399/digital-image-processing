@@ -28,6 +28,9 @@ def apply_transform(
     transformed_image = np.array(image)
 
     ### FILL: Apply Composition Transform
+    mask = np.zeros_like(transformed_image, dtype=np.uint8)
+    mask[pad_size : pad_size + image.shape[0], pad_size : pad_size + image.shape[1]] = 1
+
     # Note: for scale and rotation, implement them around the center of the image （围绕图像中心进行放缩和旋转）
     center = (transformed_image.shape[1] // 2, transformed_image.shape[0] // 2)
     # 1. Scale
@@ -42,13 +45,23 @@ def apply_transform(
         transformed_image,
         M,
         (transformed_image.shape[1], transformed_image.shape[0]),
-    ) + np.array((255, 255, 255), dtype=np.uint8).reshape(1, 1, 3)
+    )
+    transformed_mask = cv2.warpPerspective(
+        mask,
+        M,
+        (mask.shape[1], mask.shape[0]),
+    )
 
     # 4.Filp
     if flip_horizontal:
         transformed_image = cv2.flip(transformed_image, 1)
+        transformed_mask = cv2.flip(transformed_mask, 1)
 
-    return transformed_image
+    # Combine the transformed image with a white background
+    result_image = np.ones_like(image, dtype=np.uint8) * 255
+    result_image[transformed_mask == 1] = transformed_image[transformed_mask == 1]
+
+    return result_image
 
 
 # Gradio Interface

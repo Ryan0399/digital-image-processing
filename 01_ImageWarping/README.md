@@ -1,31 +1,42 @@
 # Assignment 1 - Image Warping
 
-### In this assignment, you will implement basic transformation and point-based deformation for images.
 
-### Resources:
-- [Teaching Slides](https://rec.ustc.edu.cn/share/afbf05a0-710c-11ef-80c6-518b4c8c0b96) 
-- [Paper: Image Deformation Using Moving Least Squares](https://people.engr.tamu.edu/schaefer/research/mls.pdf)
-- [Paper: Image Warping by Radial Basis Functions](https://www.sci.utah.edu/~gerig/CS6640-F2010/Project3/Arad-1995.pdf)
-- [OpenCV Geometric Transformations](https://docs.opencv.org/4.x/da/d6e/tutorial_py_geometric_transformations.html)
-- [Gradio: 一个好用的网页端交互GUI](https://www.gradio.app/)
 
 ### 1. Basic Image Geometric Transformation (Scale/Rotation/Translation).
-Fill the [Missing Part](run_global_transform.py#L21) of 'run_global_transform.py'.
 
 
 ### 2. Point Based Image Deformation.
 
-Implement MLS or RBF based image deformation in the [Missing Part](run_point_transform.py#L52) of 'run_point_transform.py'.
 
 ---
-## 一个作业提交模板 (里面的结果也可参考)
 
 
 ## Implementation of Image Geometric Transformation
 
-This repository is Yudong Guo's implementation of Assignment_01 of DIP. 
+### 1. Basic Image Geometric Transformation
 
-<img src="pics/teaser.png" alt="alt text" width="800">
+In the `run_global_transform.py` file, we implement basic image geometry transformations, including scaling, rotation, and translation. Users can upload images through the Gradio interface and adjust the transformation parameters using sliders and checkboxes.
+
+#### Main steps:
+
+1. **Image Transformation**: convert the uploaded image from PIL format to NumPy array.
+2. **Image Fill**: To avoid boundary problems, we add white fill around the image.
+3. **Transform Matrix**: Generate the transform matrix for scaling, rotation and translation and combine them into a composite transform matrix.
+4. **Apply Transform**: Apply the transform matrix using OpenCV's `cv2.warpPerspective` function.
+5. **Results Merge**: Merge the transformed image with a white background, making sure that only the original part of the image is transformed and the rest stays white.
+
+### 2. Point Based Image Deformation
+
+In the `run_point_transform.py` file, we have implemented image deformation based on control and target points. The user can upload an image through the Gradio interface and click to select the control and target points and the algorithm will deform the image based on these points.
+
+#### Main steps:
+
+1. **Upload image**: clear the previous control points and target points and upload a new image.
+2. **Record Click Points**: record the control and target points clicked by the user and mark these points on the image and draw arrows from the control points to the target points.
+3. **RBF Kernel Matrix**: computes the Radial Basis Function (RBF) kernel matrix for point guided deformation.
+4. **Calculate coefficients**: calculates the coefficients required for deformation by solving a system of linear equations.
+5. **Create grid**: generates grid points for the image and calculates the grid point positions after deformation.
+6. **Apply deformation**: generates the deformed image based on the positions of the deformed grid points.
 
 ## Requirements
 
@@ -50,13 +61,15 @@ To run point guided transformation, run:
 python run_point_transform.py
 ```
 
-## Results (need add more result images)
+## Results
 ### Basic Transformation
-<img src="pics/global_demo.gif" alt="alt text" width="800">
+<img src="pics/3.png" alt="alt text" width="800">
+<img src="pics/4.png" alt="alt_text" width="800">
 
 ### Point Guided Deformation:
-<img src="pics/point_demo.gif" alt="alt text" width="800">
+<img src="pics/1.png" alt="alt text" width="800">
+<img src="pics/2.png" alt="alt_text" width="800">
 
 ## Acknowledgement
 
->📋 Thanks for the algorithms proposed by [Image Deformation Using Moving Least Squares](https://people.engr.tamu.edu/schaefer/research/mls.pdf).
+>📋 Thanks for the algorithms proposed by [Paper: Image Warping by Radial Basis Functions](https://www.sci.utah.edu/~gerig/CS6640-F2010/Project3/Arad-1995.pdf).
