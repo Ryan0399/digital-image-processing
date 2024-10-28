@@ -10,7 +10,7 @@ bash download_facades_dataset.sh
 
 - Method 2
 
-Download and unzip the [dataset](http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/$FILE.tar.gz) to `/02_DIPwithPyTorch/Pix2Pix/datasets/facedes/`,then run
+Download and unzip the [dataset](http://efrosgans.eecs.berkeley.edu/pix2pix/datasets/facades.tar.gz) to `/02_DIPwithPyTorch/Pix2Pix/datasets/facedes/`,then run
 
 ```cmd
 python generate_file_list.py
