@@ -1,0 +1,15 @@
+02_DIPwithPyTorch/Pix2Pix/__pycache__
+02_DIPwithPyTorch/Pix2Pix/datasets/facades/train
+02_DIPwithPyTorch/Pix2Pix/datasets/facades/val
+02_DIPwithPyTorch/Pix2Pix/datasets/facades/test
+02_DIPwithPyTorch/Pix2Pix/train_results
+02_DIPwithPyTorch/Pix2Pix/val_results
+02_DIPwithPyTorch/Pix2Pix/train_list.txt
+02_DIPwithPyTorch/Pix2Pix/val_list.txt
+02_DIPwithPyTorch/1.png
+02_DIPwithPyTorch/2.png
+02_DIPwithPyTorch/3.png
+01_DIPwithPyTorch/pics/1.png
+01_DIPwithPyTorch/pics/2.png
+01_DIPwithPyTorch/pics/3.png
+01_DIPwithPyTorch/pics/4.png
