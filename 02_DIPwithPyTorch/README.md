@@ -68,4 +68,4 @@ Pix2Pix 是一种基于条件生成对抗网络（Conditional GAN）的图像到
 
 - 使用与[**01 Image Warping**](../01_ImageWarping/README.md)相同的虚拟环境
 - 安装与GPU支持的CUDA版本，并配置对应的PyTorch
-- **Pix2Pix** 的数据库导入见[README.md](Pix2Pix\README.md)
+- **Pix2Pix** 的数据库导入见[README.md](Pix2Pix/README.md)
