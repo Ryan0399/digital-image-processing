@@ -6,3 +6,5 @@
 02_DIPwithPyTorch/Pix2Pix/val_results
 02_DIPwithPyTorch/Pix2Pix/train_list.txt
 02_DIPwithPyTorch/Pix2Pix/val_list.txt
+02_DIPwithPyTorch/Pix2Pix/datasets/cityscapes/train
+02_DIPwithPyTorch/Pix2Pix/datasets/cityscapes/val

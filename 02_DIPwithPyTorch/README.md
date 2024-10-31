@@ -46,11 +46,21 @@ Pix2Pix 是一种基于条件生成对抗网络（Conditional GAN）的图像到
 
 ### Results
 
-![pic1](Pix2Pix/result_1.png)
-![pic2](Pix2Pix/result_2.png)
-![pic3](Pix2Pix/result_3.png)
-![pic4](Pix2Pix/result_4.png)
-![pic5](Pix2Pix/result_5.png)
+#### val results of facades dataset
+
+![pic1](Pix2Pix/facades_results/result_1.png)
+![pic2](Pix2Pix/facades_results/result_2.png)
+![pic3](Pix2Pix/facades_results/result_3.png)
+![pic4](Pix2Pix/facades_results/result_4.png)
+![pic5](Pix2Pix/facades_results/result_5.png)
+
+#### val results of cityscapes dataset
+
+![pic1](Pix2Pix/cityscapes_results/result_1.png)
+![pic2](Pix2Pix/cityscapes_results/result_2.png)
+![pic3](Pix2Pix/cityscapes_results/result_3.png)
+![pic4](Pix2Pix/cityscapes_results/result_4.png)
+![pic5](Pix2Pix/cityscapes_results/result_5.png)
 
 ---
 
