@@ -8,3 +8,5 @@
 02_DIPwithPyTorch/Pix2Pix/val_list.txt
 02_DIPwithPyTorch/Pix2Pix/datasets/cityscapes/train
 02_DIPwithPyTorch/Pix2Pix/datasets/cityscapes/val
+03_PlaywithGANs/Pix2Pix/__pycache__
+03_PlaywithGANs/Pix2Pix/datasets
