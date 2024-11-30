@@ -8,6 +8,8 @@ import numpy as np
 import torch
 from PIL import Image
 
+import face_alignment
+
 import dnnlib
 from gradio_utils import (
     ImageMask,
@@ -312,6 +314,13 @@ with gr.Blocks() as app:
                     interactive=True,
                     visible=False,
                 )
+                with gr.Row():
+                    with gr.Column(scale=1, min_width=10):
+                        gr.Markdown(value="Auto", show_label=False)
+                    with gr.Column(scale=4, min_width=10):
+                        with gr.Row():
+                            with gr.Column(scale=1, min_width=10):
+                                smile = gr.Button("Smile")
 
             # Right --> Image
             with gr.Column(scale=8):
@@ -681,6 +690,7 @@ with gr.Blocks() as app:
             form_lr_number,
             show_mask,
             form_lambda_number,
+            smile,
         ],
     )
 
@@ -882,6 +892,57 @@ with gr.Blocks() as app:
             global_state,
         )
         return global_state, image_draw
+
+    def on_click_smile(global_state):
+        if global_state["editing_state"] != "add_points":
+            print(f'In {global_state["editing_state"]} state. ' "Do not add points.")
+
+            return global_state, global_state["images"]["image_show"]
+
+        points = global_state["points"]
+        img = global_state["images"]["image_orig"]
+        img = np.array(img)
+
+        fa = face_alignment.FaceAlignment(
+            face_alignment.LandmarksType.TWO_D, flip_input=False
+        )
+        preds = fa.get_landmarks(img)
+        preds = np.array(preds).squeeze()
+        assert preds is not None, f"没有检测到脸"
+
+        point_idx = get_latest_points_pair(points)
+        if point_idx is None:
+            point_idx = -1
+
+        points[point_idx + 1] = {
+            "start": [int(preds[57, 0]), int(preds[57, 1])],
+            "target": [int(preds[57, 0]), int(preds[57, 1]) + 15],
+        }
+        points[point_idx + 2] = {
+            "start": [int(preds[60, 0]), int(preds[60, 1])],
+            "target": [int(preds[60, 0]) - 10, int(preds[60, 1]) - 10],
+        }
+        points[point_idx + 3] = {
+            "start": [int(preds[64, 0]), int(preds[64, 1])],
+            "target": [int(preds[64, 0]) + 10, int(preds[64, 1]) - 10],
+        }
+
+        # global_state["points"] = points
+
+        image_raw = global_state["images"]["image_raw"]
+        image_draw = update_image_draw(
+            image_raw,
+            global_state["points"],
+            global_state["mask"],
+            global_state["show_mask"],
+            global_state,
+        )
+
+        return global_state, image_draw
+
+    smile.click(
+        on_click_smile, inputs=[global_state], outputs=[global_state, form_image]
+    )
 
     show_mask.change(
         on_click_show_mask,
