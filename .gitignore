@@ -11,3 +11,4 @@
 03_PlaywithGANs/Pix2Pix/__pycache__
 03_PlaywithGANs/Pix2Pix/datasets
 03_PlaywithGANs/DragGAN/train.py
+03_PlaywithGANs/DragGAN/checkpoints

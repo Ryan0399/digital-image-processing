@@ -172,7 +172,7 @@ print(os.listdir(cache_dir))
 print("Valid checkpoint file:")
 print(valid_checkpoints_dict)
 
-init_pkl = "stylegan2_lions_512_pytorch"
+init_pkl = "stylegan2-ffhq-512x512"
 
 with gr.Blocks() as app:
 
@@ -321,6 +321,13 @@ with gr.Blocks() as app:
                         with gr.Row():
                             with gr.Column(scale=1, min_width=10):
                                 smile = gr.Button("Smile")
+                            with gr.Column(scale=1, min_width=10):
+                                big_eye = gr.Button("Big eyes")
+                        with gr.Row():
+                            with gr.Column(scale=1, min_width=10):
+                                closed_eye = gr.Button("Close eyes")
+                            with gr.Column(scale=1, min_width=10):
+                                thin_face = gr.Button("Thin Face")
 
             # Right --> Image
             with gr.Column(scale=8):
@@ -893,6 +900,12 @@ with gr.Blocks() as app:
         )
         return global_state, image_draw
 
+    show_mask.change(
+        on_click_show_mask,
+        inputs=[global_state, show_mask],
+        outputs=[global_state, form_image],
+    )
+
     def on_click_smile(global_state):
         if global_state["editing_state"] != "add_points":
             print(f'In {global_state["editing_state"]} state. ' "Do not add points.")
@@ -908,7 +921,7 @@ with gr.Blocks() as app:
         )
         preds = fa.get_landmarks(img)
         preds = np.array(preds).squeeze()
-        assert preds is not None, f"没有检测到脸"
+        assert preds is not None, f"No face was detected!"
 
         point_idx = get_latest_points_pair(points)
         if point_idx is None:
@@ -944,10 +957,165 @@ with gr.Blocks() as app:
         on_click_smile, inputs=[global_state], outputs=[global_state, form_image]
     )
 
-    show_mask.change(
-        on_click_show_mask,
-        inputs=[global_state, show_mask],
-        outputs=[global_state, form_image],
+    def on_click_big_eyes(global_state):
+        if global_state["editing_state"] != "add_points":
+            print(f'In {global_state["editing_state"]} state. ' "Do not add points.")
+            return global_state, global_state["images"]["image_show"]
+
+        points = global_state["points"]
+        img = global_state["images"]["image_orig"]
+        img = np.array(img)
+        fa = face_alignment.FaceAlignment(
+            face_alignment.LandmarksType.TWO_D, flip_input=False
+        )
+        preds = fa.get_landmarks(img)
+        preds = np.array(preds).squeeze()
+        assert preds is not None, f"No face was detected!"
+        point_idx = get_latest_points_pair(points)
+        if point_idx is None:
+            point_idx = -1
+
+        points[point_idx + 1] = {
+            "start": [int(preds[38, 0]), int(preds[38, 1])],
+            "target": [int(preds[38, 0]) + 10, int(preds[38, 1]) - 10],
+        }
+        points[point_idx + 2] = {
+            "start": [int(preds[37, 0]), int(preds[37, 1])],
+            "target": [int(preds[37, 0]) - 10, int(preds[37, 1]) - 10],
+        }
+        points[point_idx + 3] = {
+            "start": [int(preds[40, 0]), int(preds[40, 1])],
+            "target": [int(preds[40, 0]) + 10, int(preds[40, 1]) + 10],
+        }
+        points[point_idx + 4] = {
+            "start": [int(preds[43, 0]), int(preds[43, 1])],
+            "target": [int(preds[43, 0]) - 10, int(preds[43, 1]) - 10],
+        }
+        points[point_idx + 5] = {
+            "start": [int(preds[44, 0]), int(preds[44, 1])],
+            "target": [int(preds[44, 0]) + 10, int(preds[44, 1]) - 10],
+        }
+        points[point_idx + 6] = {
+            "start": [int(preds[41, 0]), int(preds[41, 1])],
+            "target": [int(preds[41, 0]) - 10, int(preds[41, 1]) + 10],
+        }
+        points[point_idx + 7] = {
+            "start": [int(preds[46, 0]), int(preds[46, 1])],
+            "target": [int(preds[46, 0]) + 10, int(preds[46, 1]) + 10],
+        }
+        points[point_idx + 8] = {
+            "start": [int(preds[47, 0]), int(preds[47, 1])],
+            "target": [int(preds[47, 0]) - 10, int(preds[47, 1]) + 10],
+        }
+
+        # global_state["points"] = points
+
+        image_raw = global_state["images"]["image_raw"]
+        image_draw = update_image_draw(
+            image_raw,
+            global_state["points"],
+            global_state["mask"],
+            global_state["show_mask"],
+            global_state,
+        )
+        return global_state, image_draw
+
+    big_eye.click(
+        on_click_big_eyes, inputs=[global_state], outputs=[global_state, form_image]
+    )
+
+    def on_click_thin(global_state):
+        if global_state["editing_state"] != "add_points":
+            print(f'In {global_state["editing_state"]} state. ' "Do not add points.")
+            return global_state, global_state["images"]["image_show"]
+
+        points = global_state["points"]
+        img = global_state["images"]["image_orig"]
+        img = np.array(img)
+        fa = face_alignment.FaceAlignment(
+            face_alignment.LandmarksType.TWO_D, flip_input=False
+        )
+        preds = fa.get_landmarks(img)
+        preds = np.array(preds).squeeze()
+        assert preds is not None, f"No face was detected!"
+        point_idx = get_latest_points_pair(points)
+        if point_idx is None:
+            point_idx = -1
+
+        points[point_idx + 1] = {
+            "start": [int(preds[4, 0]), int(preds[4, 1])],
+            "target": [int(preds[4, 0]) + 30, int(preds[4, 1])],
+        }
+        points[point_idx + 2] = {
+            "start": [int(preds[12, 0]), int(preds[12, 1])],
+            "target": [int(preds[12, 0]) - 30, int(preds[12, 1])],
+        }
+
+        # global_state["points"] = points
+
+        image_raw = global_state["images"]["image_raw"]
+        image_draw = update_image_draw(
+            image_raw,
+            global_state["points"],
+            global_state["mask"],
+            global_state["show_mask"],
+            global_state,
+        )
+        return global_state, image_draw
+
+    thin_face.click(
+        on_click_thin, inputs=[global_state], outputs=[global_state, form_image]
+    )
+
+    def on_click_closed(global_state):
+        if global_state["editing_state"] != "add_points":
+            print(f'In {global_state["editing_state"]} state. ' "Do not add points.")
+            return global_state, global_state["images"]["image_show"]
+
+        points = global_state["points"]
+        img = global_state["images"]["image_orig"]
+        img = np.array(img)
+        fa = face_alignment.FaceAlignment(
+            face_alignment.LandmarksType.TWO_D, flip_input=False
+        )
+        preds = fa.get_landmarks(img)
+        preds = np.array(preds).squeeze()
+        assert preds is not None, f"No face was detected!"
+        point_idx = get_latest_points_pair(points)
+        if point_idx is None:
+            point_idx = -1
+
+        points[point_idx + 1] = {
+            "start": [int(preds[37, 0]), int(preds[37, 1])],
+            "target": [int(preds[37, 0]) + 10, int(preds[37, 1]) + 10],
+        }
+        points[point_idx + 2] = {
+            "start": [int(preds[40, 0]), int(preds[40, 1])],
+            "target": [int(preds[40, 0]) - 10, int(preds[40, 1]) - 10],
+        }
+        points[point_idx + 3] = {
+            "start": [int(preds[43, 0]), int(preds[43, 1])],
+            "target": [int(preds[43, 0]) + 10, int(preds[43, 1]) + 10],
+        }
+        points[point_idx + 4] = {
+            "start": [int(preds[46, 0]), int(preds[46, 1])],
+            "target": [int(preds[46, 0]) - 10, int(preds[46, 1]) - 10],
+        }
+
+        # global_state["points"] = points
+
+        image_raw = global_state["images"]["image_raw"]
+        image_draw = update_image_draw(
+            image_raw,
+            global_state["points"],
+            global_state["mask"],
+            global_state["show_mask"],
+            global_state,
+        )
+        return global_state, image_draw
+
+    closed_eye.click(
+        on_click_closed, inputs=[global_state], outputs=[global_state, form_image]
     )
 
 gr.close_all()

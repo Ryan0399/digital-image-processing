@@ -2,7 +2,7 @@
 
 ## 1.Deep Learning DIP (Pix2Pix) with Discriminative loss
 
-## 2.Combine DragGAN with Automatic Face Landmarks
+## 2. Combining DragGAN with Automatic Face Landmarks
 
 ## Resources
 
@@ -44,10 +44,30 @@ Pix2Pix 是一种基于条件生成对抗网络（Conditional GAN）的图像到
 ![pic4](Pix2Pix/cityscapes_results/result_4.png)
 ![pic5](Pix2Pix/cityscapes_results/result_5.png)
 
----
+## 2. Combine DragGAN with Automatic Face Landmarks
+
+### Results
+
+#### smile
+
+![pic1](DragGAN/results/1.1.png)
+![pic2](DragGAN/results/1.2.png)
+
+#### face slimming
+
+![pic1](DragGAN/results/3.1.png)
+![pic2](DragGAN/results/3.2.png)
+
+#### big eyes
+
+![pic1](DragGAN/results/2.1.png)
+![pic2](DragGAN/results/2.2.png)
 
 ## Requirements
+
+---
 
 - 使用与[**01 Image Warping**](../01_ImageWarping/README.md)相同的虚拟环境
 - 安装与GPU支持的CUDA版本，并配置对应的PyTorch
 - **Pix2Pix** 的数据库导入见[README.md](Pix2Pix/README.md)
+- **GragGAN**的相应配置见[requirements.txt](DragGAN/requirements.txt)
