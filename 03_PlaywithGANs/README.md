@@ -46,6 +46,15 @@ Pix2Pix 是一种基于条件生成对抗网络（Conditional GAN）的图像到
 
 ## 2. Combine DragGAN with Automatic Face Landmarks
 
+### Download pre-trained StyleGAN2 weights
+
+To download pre-trained weights, simply run:
+
+```
+python scripts/download_model.py
+```
+If you want to try StyleGAN-Human and the Landscapes HQ (LHQ) dataset, please download weights from these links: [StyleGAN-Human](https://drive.google.com/file/d/1dlFEHbu-WzQWJl7nBBZYcTyo000H9hVm/view?usp=sharing), [LHQ](https://drive.google.com/file/d/16twEf0T9QINAEoMsWefoWiyhcTd-aiWc/view?usp=sharing), and put them under `./checkpoints`.
+
 ### Results
 
 #### smile
