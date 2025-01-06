@@ -1,6 +1,9 @@
 # Assignment 4 - Implement Simplified 3D Gaussian Splatting
 
-This assignment covers a complete pipeline for reconstructing a 3D scene represented by 3DGS from multi-view images. The following steps use the [chair folder](data/chair); you can use any other folder by placing images/ in it.
+## 实验目的
+
+本实验旨在通过多视图图像重建3D场景，并使用简化的3D高斯散点（3D Gaussian Splatting, 3DGS）技术进行渲染。实验步骤包括从多视图图像中恢复相机姿态和3D点，初始化3D高斯分布，并将其投影到2D图像空间进行体积渲染。
+
 
 ## Resources:
 - [Paper: 3D Gaussian Splatting](https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/)
@@ -12,70 +15,76 @@ This assignment covers a complete pipeline for reconstructing a 3D scene represe
 ## Startup process
 
 ### Step 1. Structure-from-Motion
-First, we use Colmap to recover camera poses and a set of 3D points. Please refer to [11-3D_from_Multiview.pptx](https://rec.ustc.edu.cn/share/705bfa50-6e53-11ef-b955-bb76c0fede49) to review the technical details.
-```
-python mvs_with_colmap.py --data_dir data/chair
-```
 
-Debug the reconstruction by running:
-```
-python debug_mvs_by_projecting_pts.py --data_dir data/chair
-```
+首先，我们使用 Colmap 从多视图图像中恢复相机姿态和一组3D点。具体步骤如下：
+
+1. 运行以下命令，使用 Colmap 进行结构化运动恢复：
+    ```sh
+    python mvs_with_colmap.py --data_dir data/chair
+    ```
+
+2. 调试重建结果，运行以下命令：
+    ```sh
+    python debug_mvs_by_projecting_pts.py --data_dir data/chair
+    ```
 
 ### Step 2. A Simplified 3D Gaussian Splatting (Your Main Part)
-From the debug output of Step 1, you can see that the 3D points are sparse for rendering the whole image. We will expand each point to a 3D Gaussian to make it cover more 3D space.
+从第一步的调试输出中可以看到，3D点对于渲染整个图像来说是稀疏的。我们将每个点扩展为一个3D高斯分布，以覆盖更多的3D空间。
 
-#### 2.1 3D Gaussians Initialization
-Refer to the [original paper](https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/3d_gaussian_splatting_low.pdf). For converting 3D points to 3D Gaussians, we need to define the covariance matrix for each point; the initial Gaussians' centers are just the points. According to equation (6), for defining covariance, we define a scaling matrix S and a rotation matrix R. Since we need to use the 3D Gaussians for volume rendering, we also need the opacity attribute and the color attribute for each Gaussian. The volume rendering process is formulated with equations (1), (2), (3). [The code here](gaussian_model.py#L32) contains functions to initialize these attributes as optimizable parameters. You need to fill [the code here](gaussian_model.py#L103) for computing the 3D Covariance matrix from the quaternion (for rotation) and the scaling parameters.
+#### 2.1 3D高斯分布初始化
 
-#### 2.2 Project 3D Gaussians to Obtain 2D Gaussians
-According to equation (5), we need to project the 3D Gaussians to the image space by transforming with the world to camera transformation *_W_* and the Jacobian matrix *_J_* of the projection transformation. You need to fill [the code here](gaussian_renderer.py#L26) for computing the projection.
+参考[原始论文](https://repo-sam.inria.fr/fungraph/3d-gaussian-splatting/3d_gaussian_splatting_low.pdf)，将3D点转换为3D高斯分布。我们需要为每个点定义协方差矩阵，初始高斯分布的中心就是这些点。根据公式（6），定义协方差时需要定义缩放矩阵 S 和旋转矩阵 R。由于我们需要使用3D高斯分布进行体积渲染，还需要为每个高斯分布定义不透明度和颜色属性。体积渲染过程使用公式（1）、（2）、（3）进行计算。
 
-#### 2.3 Compute the Gaussian Values
-We need to compute 2D Gaussians for volume rendering. A 2D Gaussian is represented by:
+#### 2.2 将3D高斯分布投影为2D高斯分布
+
+根据公式（5），我们需要通过世界到相机的变换矩阵 *_W_* 和投影变换的雅可比矩阵 *_J_* 将3D高斯分布投影到图像空间。
+
+#### 2.3 计算高斯值
+
+我们需要计算2D高斯分布的值以进行体积渲染。2D高斯分布的公式如下：
 
 $$
-  f(\mathbf{x}; \boldsymbol{\mu}\_{i}, \boldsymbol{\Sigma}\_{i}) = \frac{1}{2 \pi \sqrt{ | \boldsymbol{\Sigma}\_{i} |}} \exp \left ( {-\frac{1}{2}} (\mathbf{x} - \boldsymbol{\mu}\_{i})^T \boldsymbol{\Sigma}\_{i}^{-1} (\mathbf{x} - \boldsymbol{\mu}\_{i}) \right ) = \frac{1}{2 \pi \sqrt{ | \boldsymbol{\Sigma}\_{i} |}} \exp \left ( P_{(\mathbf{x}, i)} \right )
+  f(\mathbf{x}; \boldsymbol{\mu}\_{i}, \boldsymbol{\Sigma}\_{i}) = \frac{1}{2 \pi \sqrt{ | \boldsymbol{\Sigma}\_{i} |}} \exp \left ( {-\frac{1}{2}} (\mathbf{x} - \boldsymbol{\mu}\_{i})^T \boldsymbol{\Sigma}\_{i}^{-1} (\mathbf{x} - \boldsymbol{\mu}\_{i}) \right )
 $$
 
-Here, $\mathbf{x}$ is a 2D vector representing the pixel location, $\boldsymbol{\mu}$ represents a 2D vector representing the mean of the $i$-th 2D Gaussian, and $\boldsymbol{\Sigma}$ represents the covariance of the 2D Gaussian. The exponent part $P_{(\mathbf{x}, i)}$ is:
+其中，$\mathbf{x}$ 是表示像素位置的2D向量，$\boldsymbol{\mu}$ 是表示第 $i$ 个2D高斯分布均值的2D向量，$\boldsymbol{\Sigma}$ 是2D高斯分布的协方差矩阵。指数部分 $P_{(\mathbf{x}, i)}$ 为：
 
 $$
   P_{(\mathbf{x}, i)} = {-\frac{1}{2}} (\mathbf{x} - \boldsymbol{\mu}\_{i})^T \mathbf{\Sigma}\_{i}^{-1} (\mathbf{x} - \boldsymbol{\mu}\_{i})
 $$
 
-You need to fill [the code here](gaussian_renderer.py#L61) for computing the Gaussian values.
+#### 2.4 体积渲染（α-混合）
 
-#### 2.4 Volume Rendering (α-blending)
-According to equations (1-3), using these `N` ordered 2D Gaussians, we can compute their alpha and transmittance values at each pixel location in an image.
+根据公式（1-3），使用这些有序的 `N` 个2D高斯分布，我们可以计算每个像素位置的alpha值和透射率值。
 
-The alpha value of a 2D Gaussian $i$ at a single pixel location $\mathbf{x}$ can be calculated using:
-
+2D高斯分布 $i$ 在单个像素位置 $\mathbf{x}$ 的alpha值可以通过以下公式计算：
 
 $$
   \alpha_{(\mathbf{x}, i)} = o_i*f(\mathbf{x}; \boldsymbol{\mu}\_{i}, \boldsymbol{\Sigma}\_{i})
 $$
 
+其中，$o_i$ 是每个高斯分布的不透明度，是一个可学习的参数。
 
-Here, $o_i$ is the opacity of each Gaussian, which is a learnable parameter.
-
-Given `N` ordered 2D Gaussians, the transmittance value of a 2D Gaussian $i$ at a single pixel location $\mathbf{x}$ can be calculated using:
+给定 `N` 个有序的2D高斯分布，2D高斯分布 $i$ 在单个像素位置 $\mathbf{x}$ 的透射率值可以通过以下公式计算：
 
 $$
   T_{(\mathbf{x}, i)} = \prod_{j \lt i} (1 - \alpha_{(\mathbf{x}, j)})
 $$
 
-Fill [the code here](gaussian_renderer.py#L83) for final rendering computation.
+### 实现3DGS模型
 
-After implementation, build your 3DGS model:
-```
+完成上述步骤后，运行以下命令构建3DGS模型：
+
+```sh
 python train.py --colmap_dir data/chair --checkpoint_dir data/chair/checkpoints
 ```
 
 ## Results
-
+1. chair
 ![pic1](/04_3DGS/data/chair/r_59.png)
-
-## Compare with the original 3DGS Implementation
-Since we use a pure PyTorch implementation, the training speed and GPU memory usage are far from satisfactory. Also, we do not implement some crucial parts like adaptive Gaussian densification scheme. Run the [original 3DGS implementation](https://github.com/graphdeco-inria/gaussian-splatting) with the same dataset to compare the results.
+2. lego
+![pic2](/04_3DGS/data/lego/r_38.png)
+<video width="320" height="240" controls>
+    <source src="/04_3DGS/data/lego/debug_rendering.mp4" type="video/mp4">
+</video>
 
