@@ -8,6 +8,8 @@ __pycache__
 04_3DGS/data/chair/*
 !04_3DGS/data/chair/images
 !04_3DGS/data/chair/r_59.png
+!04_3DGS/data/chair/debug_rendering.mp4
 04_3DGS/data/lego/*
 !04_3DGS/data/lego/images
-!04_3DGS/data/lego/r_59.png
+!04_3DGS/data/lego/r_38.png
+!04_3DGS/data/lego/debug_rendering.mp4
