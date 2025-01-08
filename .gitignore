@@ -1,9 +1,7 @@
-02_DIPwithPyTorch/Pix2Pix/datasets
-02_DIPwithPyTorch/Pix2Pix/datasets
-02_DIPwithPyTorch/Pix2Pix/val_list.txt
-02_DIPwithPyTorch/Pix2Pix/train_list.txt
+*/Pix2Pix/datasets
+*/Pix2Pix/val_list.txt
+*/Pix2Pix/train_list.txt
 __pycache__
-03_PlaywithGANs/Pix2Pix/datasets
 03_PlaywithGANs/DragGAN/checkpoints
 04_3DGS/data/chair/*
 !04_3DGS/data/chair/images

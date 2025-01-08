@@ -81,11 +81,15 @@ python train.py --colmap_dir data/chair --checkpoint_dir data/chair/checkpoints
 
 ## Results
 1. chair
+   
   ![pic1](/04_3DGS/data/chair/r_62.png)
+
   ![gif1](/04_3DGS/data/chair/debug_rendering.gif)
 
-1. lego 
+2. lego 
+   
   ![pic2](/04_3DGS/data/lego/r_18.png)
+  
   ![gif2](/04_3DGS/data/lego/debug_rendering.gif)
 
 ## Replenishments
