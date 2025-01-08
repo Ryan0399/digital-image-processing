@@ -81,10 +81,14 @@ python train.py --colmap_dir data/chair --checkpoint_dir data/chair/checkpoints
 
 ## Results
 1. chair
-![pic1](/04_3DGS/data/chair/r_59.png)
-2. lego
-![pic2](/04_3DGS/data/lego/r_38.png)
-<video width="320" height="240" controls>
-    <source src="/04_3DGS/data/lego/debug_rendering.mp4" type="video/mp4">
-</video>
+  ![pic1](/04_3DGS/data/chair/r_62.png)
+  ![gif1](/04_3DGS/data/chair/debug_rendering.gif)
 
+1. lego 
+  ![pic2](/04_3DGS/data/lego/r_18.png)
+  ![gif2](/04_3DGS/data/lego/debug_rendering.gif)
+
+## Replenishments
+
+1. 在实验过程发现，通过修改优化变量的学习率，可以进一步提升最终的Gaussian质量。
+2. 由于reference的分辨率很低，所以最终得到的Gaussian渲染出的图片分辨率也很低。
