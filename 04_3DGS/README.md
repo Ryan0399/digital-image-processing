@@ -47,7 +47,7 @@ $$
   f(\mathbf{x}; \boldsymbol{\mu}\_{i}, \boldsymbol{\Sigma}\_{i}) = \frac{1}{2 \pi \sqrt{ | \boldsymbol{\Sigma}\_{i} |}} \exp \left ( {-\frac{1}{2}} (\mathbf{x} - \boldsymbol{\mu}\_{i})^T \boldsymbol{\Sigma}\_{i}^{-1} (\mathbf{x} - \boldsymbol{\mu}\_{i}) \right )
 $$
 
-其中，$\mathbf{x}$ 是表示像素位置的2D向量，$\boldsymbol{\mu}$ 是表示第 $i$ 个2D高斯分布均值的2D向量，$\boldsymbol{\Sigma}$ 是2D高斯分布的协方差矩阵。指数部分 $P_{(\mathbf{x}, i)}$ 为：
+其中， $\mathbf{x}$ 是表示像素位置的2D向量， $\boldsymbol{\mu}$ 是表示第 $i$ 个2D高斯分布均值的2D向量， $\boldsymbol{\Sigma}$ 是2D高斯分布的协方差矩阵。指数部分 $P_{(\mathbf{x}, i)}$ 为：
 
 $$
   P_{(\mathbf{x}, i)} = {-\frac{1}{2}} (\mathbf{x} - \boldsymbol{\mu}\_{i})^T \mathbf{\Sigma}\_{i}^{-1} (\mathbf{x} - \boldsymbol{\mu}\_{i})
@@ -63,7 +63,7 @@ $$
   \alpha_{(\mathbf{x}, i)} = o_i*f(\mathbf{x}; \boldsymbol{\mu}\_{i}, \boldsymbol{\Sigma}\_{i})
 $$
 
-其中，$o_i$ 是每个高斯分布的不透明度，是一个可学习的参数。
+其中， $o_i$ 是每个高斯分布的不透明度，是一个可学习的参数。
 
 给定 `N` 个有序的2D高斯分布，2D高斯分布 $i$ 在单个像素位置 $\mathbf{x}$ 的透射率值可以通过以下公式计算：
 
