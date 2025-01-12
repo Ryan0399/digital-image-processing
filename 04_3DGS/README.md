@@ -92,6 +92,9 @@ python train.py --colmap_dir data/chair --checkpoint_dir data/chair/checkpoints
   
   ![gif2](/04_3DGS/data/lego/debug_rendering.gif)
 
+### Compare with the original 3DGS Implementation
+我们将[数据集](/04_3DGS/data/)上传至Colab  [![Open In Colab](https://colab.research.google.com/assets/colab-badge.svg)](/04_3DGS/gaussian_splatting_colab.ipynb)，在云端运行后即可得到原始3DGS的训练结果。
+
 ## Replenishments
 
 1. 在实验过程发现，通过修改优化变量的学习率，可以进一步提升最终的Gaussian质量。
